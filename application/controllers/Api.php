@@ -15,7 +15,7 @@ class Api extends MY_Controller
     	}
 
     	//进行过滤
-    	$username = preg_replace("/(\"|\'|\\\\|\;|\-|\/)/", "\\$1", $username);
+    	$username = preg_replace("/(\"|\'|\\\\|\;|\-|\/)/", "\\\\$1", $username);
     	$password = $this->do_password_hash($password);
     	if( preg_match("/\s/", $username)) {
     		die(json_encode(array('mes' => "你的请求中包含有危险参数", "error"=>"0")));
@@ -84,7 +84,7 @@ class Api extends MY_Controller
 		$Head = @unserialize($Head);
 		$Head->delete = 1;
 		if( preg_match("/(\/|\\\\|\.)/",$Head->name) || preg_match("/(\/|\\\\|\.)/",$Head->type) ) {
-			echo "用户删除失败!";
+			echo json_encode(array('mes'=>"用户删除失败", "error"=>"1"));
 			throw new Exception("unknow error!");
 		}
 		else{
